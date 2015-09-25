@@ -146,7 +146,7 @@ public class SURBL {
 	}
 
 	private void loadL3() throws IOException {
-		set3 = Collections.unmodifiableSet(loadSetFromFile(storeLevel3, new HashSet<String>(512)));
+		set3 = Collections.unmodifiableSet(loadSetFromFile(storeLevel3, new HashSet<String>(4096)));
 	}
 
 	private static Set<String> loadSetFromFile(final File f, final Set<String> s) throws IOException {
