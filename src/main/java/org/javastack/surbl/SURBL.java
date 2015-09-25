@@ -202,8 +202,7 @@ public class SURBL {
 	 * @throws UnknownHostException if domain dont exist
 	 * @throws MalformedURLException if url is malformed
 	 */
-	public boolean checkSURBL(final String hostname) throws UnknownHostException, MalformedURLException {
-		final InetAddress inetAddr = InetAddress.getByName(hostname);
+	public boolean checkSURBL(final String hostname) throws MalformedURLException {
 		final StringBuilder sb = new StringBuilder(hostname.length() + 16);
 		final StringTokenizer st = new StringTokenizer(hostname, ".");
 		final ArrayList<String> list = new ArrayList<String>();
@@ -212,15 +211,20 @@ public class SURBL {
 			list.add(st.nextToken());
 		}
 		// Check IP addresses
-		final String addr = inetAddr.getHostAddress();
-		final String name = inetAddr.getHostName();
-		if (addr.equals(name)) {
-			if (inetAddr instanceof Inet4Address) {
-				Collections.reverse(list);
-				levels = 4;
-			} else if (inetAddr instanceof Inet6Address) {
-				throw new MalformedURLException("Unsupported IPv6");
+		try {
+			final InetAddress inetAddr = InetAddress.getByName(hostname);
+			final String addr = inetAddr.getHostAddress();
+			final String name = inetAddr.getHostName();
+			if (addr.equals(name)) {
+				if (inetAddr instanceof Inet4Address) {
+					Collections.reverse(list);
+					levels = 4;
+				} else if (inetAddr instanceof Inet6Address) {
+					throw new MalformedURLException("Unsupported IPv6");
+				}
 			}
+		} catch (UnknownHostException e) {
+			log.warn("UnknownHostException: " + hostname);
 		}
 		log.info("Domain tokens: " + list);
 		if (list.size() < 2) // local hosts
