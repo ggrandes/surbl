@@ -223,6 +223,8 @@ public class SURBL {
 			}
 		}
 		log.info("Domain tokens: " + list);
+		if (list.size() < 2) // local hosts
+			return false;
 		while (true) {
 			sb.setLength(0);
 			getHostLevel(list, levels, sb);
