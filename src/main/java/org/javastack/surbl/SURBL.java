@@ -214,8 +214,7 @@ public class SURBL {
 		try {
 			final InetAddress inetAddr = InetAddress.getByName(hostname);
 			final String addr = inetAddr.getHostAddress();
-			final String name = inetAddr.getHostName();
-			if (addr.equals(name)) {
+			if (addr.equals(hostname)) {
 				if (inetAddr instanceof Inet4Address) {
 					Collections.reverse(list);
 					levels = 4;
